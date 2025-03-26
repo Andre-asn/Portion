@@ -1,7 +1,8 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import { supabase } from './lib/supabase';
-import { Signin } from './components/Signin';
-import { Dashboard } from './components/Dashboard';
+import { Signin } from './pages/Signin';
+import { Dashboard } from './pages/Dashboard';
+import { Buddies } from './pages/Buddies';
 
 async function requireAuth() {
   const { data: { session } } = await supabase.auth.getSession();
@@ -34,4 +35,9 @@ export const router = createBrowserRouter([
     element: <Dashboard />,
     loader: requireAuth,
   },
+  {
+    path: '/buddies',
+    element: <Buddies />,
+    loader: requireAuth,
+  }
 ]); 

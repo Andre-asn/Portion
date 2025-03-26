@@ -1,48 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
+import { Sidebar } from '../components/Sidebar';
 
 export function Dashboard() {
-  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
-  async function handleSignOut() {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      navigate('/');
-    } catch (error) {
-      console.error('Error signing out:', error.message);
+  useEffect(() => {
+    async function getUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
     }
-  }
+    getUser();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#F9F7F3]">
       {/* Sidebar */}
-      <motion.div 
-        className="fixed left-0 top-0 h-full w-64 bg-[#B5E2FA] shadow-lg"
-        initial={{ x: -100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="p-6">
-          <h1 className="text-3xl font-bold text-[#0FA3B1] mb-8">Portion</h1>
-          <nav className="space-y-4">
-            <a href="#" className="block text-[#0FA3B1] hover:bg-[#EDDEA4] p-2 rounded-lg transition-colors">
-              Dashboard
-            </a>
-            <a href="#" className="block text-[#0FA3B1] hover:bg-[#EDDEA4] p-2 rounded-lg transition-colors">
-              My Groups
-            </a>
-            <a href="#" className="block text-[#0FA3B1] hover:bg-[#EDDEA4] p-2 rounded-lg transition-colors">
-              Expenses
-            </a>
-            <a href="#" className="block text-[#0FA3B1] hover:bg-[#EDDEA4] p-2 rounded-lg transition-colors">
-              Settings
-            </a>
-          </nav>
-        </div>
-      </motion.div>
+      <Sidebar />
 
       {/* Main Content */}
       <div className="ml-64 p-8">
@@ -54,16 +30,9 @@ export function Dashboard() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-2xl font-semibold text-[#0FA3B1]">Welcome to Your Dashboard</h2>
-          <button
-            onClick={() => handleSignOut()}
-            className="btn btn-primary px-4 py-2 bg-[#F7A072] text-white rounded-lg hover:bg-opacity-90 transition-colors"
-          >
-            Sign Out
-          </button>
         </motion.div>
 
         {/* Dashboard Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Recent Activity Card */}
           <motion.div 
             className="bg-white p-6 rounded-xl shadow-md"
@@ -117,6 +86,5 @@ export function Dashboard() {
           </motion.div>
         </div>
       </div>
-    </div>
   );
 }

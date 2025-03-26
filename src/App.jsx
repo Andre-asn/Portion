@@ -11,7 +11,7 @@ function App({ children }) {
     // Handle initial session and OAuth callback
     const handleAuthCallback = async () => {
       setLoading(true);
-      
+
       // Get session from URL if present (OAuth callback)
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       if (hashParams.get('access_token')) {
@@ -19,14 +19,14 @@ function App({ children }) {
           access_token: hashParams.get('access_token'),
           refresh_token: hashParams.get('refresh_token'),
         });
-        
+
         if (!error && session) {
           // Clean up URL
           window.history.replaceState({}, document.title, window.location.pathname);
           navigate('/dashboard');
         }
       }
-      
+
       setLoading(false);
     };
 

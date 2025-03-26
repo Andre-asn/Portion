@@ -171,7 +171,6 @@ export function Signin() {
   async function handleGoogleSignIn() {
     try {
       setLoading(true)
-      setActiveProvider('google')
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -184,16 +183,15 @@ export function Signin() {
       })
       if (error) throw error
     } catch (error) {
-      alert(error.message)
-      setLoading(false)
-      setActiveProvider(null)
-    }
+        alert(error.message)
+      } finally {
+        setLoading(false)  
+      }
   }
 
   async function handleDiscordSignIn() {
     try {
       setLoading(true)
-      setActiveProvider('discord')
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'discord',
         options: {
@@ -206,8 +204,8 @@ export function Signin() {
       if (error) throw error
     } catch (error) {
       alert(error.message)
-      setLoading(false)
-      setActiveProvider(null)
+    } finally {
+      setLoading(false)  
     }
   }
 
