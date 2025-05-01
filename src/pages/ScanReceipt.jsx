@@ -41,52 +41,43 @@ export function ScanReceipt() {
       setError('Please select an image file first.');
       return;
     }
-
-    console.log('Starting LLM receipt processing...');
+  
     setIsProcessing(true);
     setError(null);
     setParsedItems([]);
-
-    // Convert image to base64 to send to backend function
+  
     const reader = new FileReader();
     reader.readAsDataURL(selectedFile);
     reader.onload = async () => {
-        const base64Image = reader.result;
-
-        try {
-            console.log('Calling Supabase function scan-receipt...');
-            // TODO: Replace with actual Supabase function invocation
-            // Example structure:
-            // const { data, error: functionError } = await supabase.functions.invoke(
-            //   'scan-receipt',
-            //   { body: { image: base64Image } }
-            // );
-
-            // if (functionError) throw functionError;
-            // if (!data || !data.items) throw new Error('Invalid response from function'); 
-            
-            // Simulating a delay and success for now
-            await new Promise(resolve => setTimeout(resolve, 2000)); 
-            const simulatedData = { items: [{ item: 'Simulated Item 1', price: 10.99 }, { item: 'Simulated Item 2', price: 5.50 }] }; // Placeholder
-            
-            console.log('Received response from function:', simulatedData);
-            setParsedItems(simulatedData.items || []);
-
-        } catch (err) {
-            console.error('Error processing receipt via LLM:', err);
-            setError(`Failed to process receipt: ${err.message || 'Unknown error'}`);
-            setParsedItems([]);
-        } finally {
-            console.log('Finishing LLM receipt processing.');
-            setIsProcessing(false);
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/scan-receipt`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({ 
+              image: reader.result 
+            }),
+          }
+        );
+  
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to process receipt');
         }
-    };
-    reader.onerror = (err) => {
-        console.error('Error reading file:', err);
-        setError('Failed to read image file.');
+  
+        setParsedItems(data.items || []);
+      } catch (error) {
+        console.error('Error:', error);
+        setError(error.message);
+      } finally {
         setIsProcessing(false);
+      }
     };
-
   }, [selectedFile]);
 
   return (
