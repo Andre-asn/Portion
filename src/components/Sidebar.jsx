@@ -8,7 +8,7 @@ import {
   FaHistory, 
   FaCog, 
   FaSignOutAlt,
-  FaReceipt
+  FaUtensils
 } from 'react-icons/fa';
 
 export function Sidebar() {
@@ -48,8 +48,8 @@ export function Sidebar() {
   // Define navigation items with icons
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: FaTachometerAlt },
+    { path: '/tables', label: 'Tables', icon: FaUtensils },
     { path: '/buddies', label: 'Buddies', icon: FaUserFriends },
-    { path: '/scan-receipt', label: 'Scan Receipt', icon: FaReceipt },
     { path: '/history', label: 'History', icon: FaHistory },
     // { path: '/settings', label: 'Settings', icon: FaCog } // Example: Add settings later if needed
   ];

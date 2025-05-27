@@ -3,7 +3,8 @@ import { supabase } from './lib/supabase';
 import { Signin } from './pages/Signin';
 import { Dashboard } from './pages/Dashboard';
 import { Buddies } from './pages/Buddies';
-import { ScanReceipt } from './pages/ScanReceipt';
+import { Tables } from './pages/Tables';
+import { CreateTable } from './pages/CreateTable';
 
 async function requireAuth() {
   const { data: { session } } = await supabase.auth.getSession();
@@ -42,8 +43,13 @@ export const router = createBrowserRouter([
     loader: requireAuth,
   },
   {
-    path: '/scan-receipt',
-    element: <ScanReceipt />,
+    path: '/tables',
+    element: <Tables />,
+    loader: requireAuth,
+  },
+  {
+    path: '/create-table',
+    element: <CreateTable />,
     loader: requireAuth,
   }
 ]); 

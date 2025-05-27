@@ -45,8 +45,8 @@ serve(async (req) => {
 		contents: [{
 		  parts: [
 			{ text: `Analyze this receipt and extract all items and their prices.
-        	Format your response ONLY as a JSON array of objects, each with 'item' and 'price' fields.
-        	Example format: [{"item": "Burger", "price": 12.99}, {"item": "Fries", "price": 4.99}]
+        	Format your response ONLY as a JSON array of objects, each with 'item', 'amount' (default value of 1 if no amount is displayed), and 'price' fields.
+        	Example format: [{"item": "Burger", "amount": 2, "price": 24.99}, {"item": "Fries", "amount": 1, "price": 4.99}]
         	Do not include any other text or explanation in your response.` },
 			{ inlineData: { data: image.split(",")[1], mimeType: "image/jpeg" } }
 		  ]
